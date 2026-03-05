@@ -1,6 +1,6 @@
 {
   "name": "@vnphu/nestjs-api-explorer",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "An in-app API explorer for NestJS — like Postman, but built right into your app.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

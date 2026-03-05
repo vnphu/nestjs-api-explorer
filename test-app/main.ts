@@ -103,7 +103,7 @@ class OrdersController {
     ApiExplorerModule.register({
       path: 'api-explorer',
       title: 'My API — Explorer',
-      docsFile: './api-explorer.md',
+      docsFolder: './docs',
     }),
   ],
   controllers: [UsersController, AuthController, ProductsController, OrdersController],

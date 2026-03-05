@@ -214,3 +214,41 @@ export function parseDocsFile(filePath: string): Map<string, RouteDoc> {
   flush();
   return map;
 }
+
+/**
+ * Recursively collect all `.md` files under a directory.
+ */
+function collectMdFiles(dir: string): string[] {
+  const results: string[] = [];
+  let entries: fs.Dirent[];
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return results;
+  }
+  for (const entry of entries) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...collectMdFiles(full));
+    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+      results.push(full);
+    }
+  }
+  return results;
+}
+
+/**
+ * Parse all `.md` files inside a folder (recursively) and merge into one map.
+ */
+export function parseDocsFolder(folderPath: string): Map<string, RouteDoc> {
+  const resolved = path.isAbsolute(folderPath)
+    ? folderPath
+    : path.resolve(process.cwd(), folderPath);
+
+  const merged = new Map<string, RouteDoc>();
+  for (const file of collectMdFiles(resolved)) {
+    const fileMap = parseDocsFile(file);
+    fileMap.forEach((doc, key) => merged.set(key, doc));
+  }
+  return merged;
+}

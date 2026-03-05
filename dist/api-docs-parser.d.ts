@@ -21,4 +21,8 @@ export interface RouteDoc {
  * `"METHOD:path"` → RouteDoc.
  */
 export declare function parseDocsFile(filePath: string): Map<string, RouteDoc>;
+/**
+ * Parse all `.md` files inside a folder (recursively) and merge into one map.
+ */
+export declare function parseDocsFolder(folderPath: string): Map<string, RouteDoc>;
 //# sourceMappingURL=api-docs-parser.d.ts.map

@@ -1,5 +1,6 @@
 import { RouteDoc, DocField } from './api-docs-parser';
 export declare const API_EXPLORER_DOCS_FILE = "API_EXPLORER_DOCS_FILE";
+export declare const API_EXPLORER_DOCS_FOLDER = "API_EXPLORER_DOCS_FOLDER";
 export { DocField, RouteDoc };
 export interface RouteInfo {
     method: string;
@@ -14,8 +15,9 @@ export interface RouteInfo {
 }
 export declare class ApiExplorerService {
     private readonly docsFile;
+    private readonly docsFolder;
     private _docsMap;
-    constructor(docsFile: string | null);
+    constructor(docsFile: string | null, docsFolder: string | null);
     getRoutes(expressApp: any): RouteInfo[];
     private scanApp;
     private traverseStack;

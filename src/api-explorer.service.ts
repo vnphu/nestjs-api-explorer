@@ -1,7 +1,8 @@
 import { Injectable, Inject, Optional } from '@nestjs/common';
-import { parseDocsFile, RouteDoc, DocField } from './api-docs-parser';
+import { parseDocsFile, parseDocsFolder, RouteDoc, DocField } from './api-docs-parser';
 
 export const API_EXPLORER_DOCS_FILE = 'API_EXPLORER_DOCS_FILE';
+export const API_EXPLORER_DOCS_FOLDER = 'API_EXPLORER_DOCS_FOLDER';
 
 export { DocField, RouteDoc };
 
@@ -24,12 +25,20 @@ export class ApiExplorerService {
   constructor(
     @Optional() @Inject(API_EXPLORER_DOCS_FILE)
     private readonly docsFile: string | null,
+    @Optional() @Inject(API_EXPLORER_DOCS_FOLDER)
+    private readonly docsFolder: string | null,
   ) {}
 
   getRoutes(expressApp: any): RouteInfo[] {
-    // Lazy-load docs file once
+    // Lazy-load docs once
     if (this._docsMap === null) {
-      this._docsMap = this.docsFile ? parseDocsFile(this.docsFile) : new Map();
+      if (this.docsFolder) {
+        this._docsMap = parseDocsFolder(this.docsFolder);
+      } else if (this.docsFile) {
+        this._docsMap = parseDocsFile(this.docsFile);
+      } else {
+        this._docsMap = new Map();
+      }
     }
 
     const routes = this.scanApp(expressApp);

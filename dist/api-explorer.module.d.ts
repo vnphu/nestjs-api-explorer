@@ -19,6 +19,15 @@ export interface ApiExplorerOptions {
      */
     docsFile?: string;
     /**
+     * Path to a folder containing markdown docs files (scanned recursively).
+     * All `.md` files found will be merged together.
+     * Can be absolute or relative to process.cwd().
+     *
+     * @example './docs'
+     * @example '/app/docs/api'
+     */
+    docsFolder?: string;
+    /**
      * Explicitly enable or disable the explorer.
      * The explorer is automatically disabled when NODE_ENV === 'production'.
      * @default true
@@ -29,6 +38,7 @@ export interface ResolvedApiExplorerOptions {
     path: string;
     title: string;
     docsFile: string | null;
+    docsFolder: string | null;
     enabled: boolean;
 }
 export declare const API_EXPLORER_OPTIONS = "API_EXPLORER_OPTIONS";

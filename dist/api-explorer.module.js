@@ -15,6 +15,7 @@ const DEFAULTS = {
     path: 'api-explorer',
     title: 'API Explorer',
     docsFile: null,
+    docsFolder: null,
     enabled: true,
 };
 exports.API_EXPLORER_OPTIONS = 'API_EXPLORER_OPTIONS';
@@ -25,6 +26,7 @@ let ApiExplorerModule = ApiExplorerModule_1 = class ApiExplorerModule {
             ...DEFAULTS,
             ...options,
             docsFile: options.docsFile ?? null,
+            docsFolder: options.docsFolder ?? null,
         };
         if (!resolved.enabled || isProduction) {
             return { module: ApiExplorerModule_1 };
@@ -42,6 +44,10 @@ let ApiExplorerModule = ApiExplorerModule_1 = class ApiExplorerModule {
                 {
                     provide: api_explorer_service_1.API_EXPLORER_DOCS_FILE,
                     useValue: resolved.docsFile,
+                },
+                {
+                    provide: api_explorer_service_1.API_EXPLORER_DOCS_FOLDER,
+                    useValue: resolved.docsFolder,
                 },
             ],
             exports: [api_explorer_service_1.ApiExplorerService],

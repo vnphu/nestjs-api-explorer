@@ -34,6 +34,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parseDocsFile = parseDocsFile;
+exports.parseDocsFolder = parseDocsFolder;
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 const KNOWN_TYPES = new Set(['string', 'number', 'boolean', 'array', 'object']);
@@ -230,5 +231,42 @@ function parseDocsFile(filePath) {
     }
     flush();
     return map;
+}
+/**
+ * Recursively collect all `.md` files under a directory.
+ */
+function collectMdFiles(dir) {
+    const results = [];
+    let entries;
+    try {
+        entries = fs.readdirSync(dir, { withFileTypes: true });
+    }
+    catch {
+        return results;
+    }
+    for (const entry of entries) {
+        const full = path.join(dir, entry.name);
+        if (entry.isDirectory()) {
+            results.push(...collectMdFiles(full));
+        }
+        else if (entry.isFile() && entry.name.endsWith('.md')) {
+            results.push(full);
+        }
+    }
+    return results;
+}
+/**
+ * Parse all `.md` files inside a folder (recursively) and merge into one map.
+ */
+function parseDocsFolder(folderPath) {
+    const resolved = path.isAbsolute(folderPath)
+        ? folderPath
+        : path.resolve(process.cwd(), folderPath);
+    const merged = new Map();
+    for (const file of collectMdFiles(resolved)) {
+        const fileMap = parseDocsFile(file);
+        fileMap.forEach((doc, key) => merged.set(key, doc));
+    }
+    return merged;
 }
 //# sourceMappingURL=api-docs-parser.js.map

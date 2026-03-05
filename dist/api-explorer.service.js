@@ -12,19 +12,29 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ApiExplorerService = exports.API_EXPLORER_DOCS_FILE = void 0;
+exports.ApiExplorerService = exports.API_EXPLORER_DOCS_FOLDER = exports.API_EXPLORER_DOCS_FILE = void 0;
 const common_1 = require("@nestjs/common");
 const api_docs_parser_1 = require("./api-docs-parser");
 exports.API_EXPLORER_DOCS_FILE = 'API_EXPLORER_DOCS_FILE';
+exports.API_EXPLORER_DOCS_FOLDER = 'API_EXPLORER_DOCS_FOLDER';
 let ApiExplorerService = class ApiExplorerService {
-    constructor(docsFile) {
+    constructor(docsFile, docsFolder) {
         this.docsFile = docsFile;
+        this.docsFolder = docsFolder;
         this._docsMap = null;
     }
     getRoutes(expressApp) {
-        // Lazy-load docs file once
+        // Lazy-load docs once
         if (this._docsMap === null) {
-            this._docsMap = this.docsFile ? (0, api_docs_parser_1.parseDocsFile)(this.docsFile) : new Map();
+            if (this.docsFolder) {
+                this._docsMap = (0, api_docs_parser_1.parseDocsFolder)(this.docsFolder);
+            }
+            else if (this.docsFile) {
+                this._docsMap = (0, api_docs_parser_1.parseDocsFile)(this.docsFile);
+            }
+            else {
+                this._docsMap = new Map();
+            }
         }
         const routes = this.scanApp(expressApp);
         return routes.map((r) => {
@@ -105,6 +115,8 @@ exports.ApiExplorerService = ApiExplorerService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Optional)()),
     __param(0, (0, common_1.Inject)(exports.API_EXPLORER_DOCS_FILE)),
-    __metadata("design:paramtypes", [Object])
+    __param(1, (0, common_1.Optional)()),
+    __param(1, (0, common_1.Inject)(exports.API_EXPLORER_DOCS_FOLDER)),
+    __metadata("design:paramtypes", [Object, Object])
 ], ApiExplorerService);
 //# sourceMappingURL=api-explorer.service.js.map

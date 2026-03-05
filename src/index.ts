@@ -14,4 +14,4 @@ export {
 } from './api-explorer.service';
 
 export { getExplorerHtml } from './api-explorer.html';
-export { parseDocsFile } from './api-docs-parser';
+export { parseDocsFile, parseDocsFolder } from './api-docs-parser';
