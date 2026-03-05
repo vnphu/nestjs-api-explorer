@@ -1,6 +1,6 @@
 {
   "name": "@vnphu/nestjs-api-explorer",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "An in-app API explorer for NestJS — like Postman, but built right into your app.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,6 +25,14 @@
   ],
   "author": "vnphu",
   "license": "MIT",
+  "homepage": "https://github.com/vnphu/nestjs-api-explorer#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vnphu/nestjs-api-explorer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vnphu/nestjs-api-explorer/issues"
+  },
   "peerDependencies": {
     "@nestjs/common": ">=9.0.0",
     "@nestjs/core": ">=9.0.0",
