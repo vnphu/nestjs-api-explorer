@@ -5,7 +5,7 @@ An in-app API explorer for NestJS — like Postman, but embedded directly into y
 ## Features
 
 - **Route auto-discovery** — scans the live Express router, no decorators needed
-- **Markdown docs** — document body fields, query params, headers, and responses in a simple `.md` file
+- **Markdown docs** — document body fields, query params, headers, and responses in a simple `.md` file or a folder of `.md` files
 - **Full request builder** — path params, query params, headers, auth, and body
 - **Global auth** — set Bearer Token / Basic Auth / API Key once, applies to all requests
 - **Body types** — JSON (with formatter), Form-encoded, Plain text
@@ -42,9 +42,44 @@ Open your browser at `http://localhost:3000/api-explorer`.
 
 ---
 
-## Documenting your API (Markdown file)
+## Documenting your API (Markdown)
 
-Create a file `api-explorer.md` in your project root (or anywhere — just set `docsFile` to the path).
+### Option A — Single file
+
+Point `docsFile` to a `.md` file anywhere in your project:
+
+```typescript
+ApiExplorerModule.register({
+  docsFile: './api-explorer.md',
+})
+```
+
+### Option B — Folder of files
+
+Point `docsFolder` to a directory. All `.md` files inside (including subfolders) are scanned and merged automatically:
+
+```typescript
+ApiExplorerModule.register({
+  docsFolder: './docs',
+})
+```
+
+Example folder structure:
+
+```
+docs/
+├── auth.md
+├── users.md
+└── shop/
+    ├── products.md
+    └── orders.md
+```
+
+Each file follows the same markdown syntax. Routes from all files are merged into one map. If two files define the same `METHOD /path`, the last file read wins.
+
+---
+
+### Full example
 
 ### Full example
 
@@ -366,10 +401,16 @@ ApiExplorerModule.register({
   // Default: 'API Explorer'
   title: 'My API — Explorer',
 
-  // Path to the markdown docs file
+  // Path to a single markdown docs file
   // Relative paths are resolved from process.cwd()
-  // Default: null (no docs, routes still shown without documentation)
+  // Default: null
   docsFile: './api-explorer.md',
+
+  // Path to a folder of markdown docs files (scanned recursively)
+  // All .md files found are merged together
+  // If both docsFile and docsFolder are set, docsFolder takes priority
+  // Default: null
+  docsFolder: './docs',
 
   // Explicitly enable or disable
   // The explorer is ALWAYS disabled when NODE_ENV === 'production'
@@ -436,6 +477,7 @@ import {
   RouteInfo,
   DocField,
   parseDocsFile,
+  parseDocsFolder,
 } from '@vnphu/nestjs-api-explorer';
 
 // DocField — one field in body/query/params/headers/response
